@@ -15,11 +15,19 @@ describe User do
 	end
 
 	it "is invalid without a first name" do
-		expect(User.new(firstname: nil)).to have(1).errors_on(:firstname)
+		expect(User.new(firstname: nil)).to have(2).errors_on(:firstname)
+	end
+
+	it "does not accept numbers or symbols as part of first name" do
+		expect(User.new(firstname: "mike1")).to have(1).errors_on(:firstname)
 	end
 
 	it "is invalid without a last name" do
-		expect(User.new(lastname: nil)).to have(1).errors_on(:lastname)
+		expect(User.new(lastname: nil)).to have(2).errors_on(:lastname)
+	end
+
+	it "does not accept numbers or symbols as part of last name" do
+		expect(User.new(lastname: "Vezz@ni")).to have(1).errors_on(:lastname)
 	end
 
 	it "displays first name and last name correctly" do
@@ -33,6 +41,14 @@ describe User do
 	end
 	
 	it "is invalid without a password" do
-		expect(User.new(password: nil)).to have(1).errors_on(:password)
+		expect(User.new(password: nil)).to have(2).errors_on(:password)
+	end
+
+	it "is invalid with a password that is too short" do
+		expect(User.new(password: "aaa")).to have(1).errors_on(:password)
+	end
+
+	it "is invalid with a password that is too long" do
+		expect(User.new(password: "a" * 21)).to have(1).errors_on(:password)
 	end
 end
